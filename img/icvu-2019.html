@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>ICVU</title>
+    <link rel="stylesheet" type="text/css" href="estilo.css">
+</head>
+
+<body>
+    
+    <nav>
+        <a href="index.html">Revista UTE</a> <a href="icvu-2019.html"class="actual">ICVU 2019</a> <a href="psu-nem.html">PSU/NEM</a> <a href="trabajo.html">DESEMPLEO</a> <a href="global-warming.html">CALENTAMIENTO GLOBAL</a>
+    </nav>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/p5.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/addons/p5.dom.min.js"></script>
+
+    <script>
+        var titulos = ["numero", "comuna", "condiciones \n laborales", "ambiente \n de negocios", " condiciones \n socioculturales", "conectividad \n y movilidad", "salud y\n  medioambiente", "vivienda \n y entorno", "icvu 2019"];
+var rm = [0, 0, 67.44, 38.92, 37.7, 74.69, 57.15, 40.29, 53.98]
+var data, sel, opcion
+
+function preload() {
+  data = loadTable("https://raw.githubusercontent.com/lauracondes/evaluacion01/master/icvu.csv", "csv", "header");
+}
+
+function setup() {
+  createCanvas(windowWidth, windowHeight);
+  n = data.getRowCount();
+  sel = createSelect();
+  sel.position(10, 10);
+  for (x = 0; x < n; x++) {
+    sel.option(data.get(x, 1), data.get(x, 0) - 1);
+  }
+  sel.changed(seleccion);
+  print(data.get(1, 1));
+  for (x = 2; x < 9; x++) {
+    fill(0);
+    text(titulos[x], (x - 1) * 100 - 30, height - 50)
+    text(rm[x], (x - 1) * 100 - 15, height - rm[x] * 6 - 100);
+    stroke(0);
+    line((x - 1) * 100 - 15, height - 100, (x - 1) * 100 - 15, height - rm[x] * 6 - 100)
+    stroke(255, 0, 0);
+    fill(255, 0, 0);
+    line((x - 1) * 100 + 15, height - 100, (x - 1) * 100 + 15, height - data.get(0, x) * 6 - 100)
+    noStroke();
+    text(data.get(0, x), (x - 1) * 100 + 15, height - data.get(0, x) * 6 - 100)
+  }
+
+}
+
+function seleccion() {
+  clear();
+  fill(0);
+  opcion = sel.value()
+  for (x = 2; x < 9; x++) {
+    text(titulos[x], (x - 1) * 100 - 30, height - 50)
+  }
+  for (x = 2; x < 9; x++) {
+    fill(0);
+    text(rm[x], (x - 1) * 100 - 15, height - rm[x] * 6 - 100);
+    stroke(0);
+    line((x - 1) * 100 - 15, height - 100, (x - 1) * 100 - 15, height - rm[x] * 6 - 100)
+    fill(255, 0, 0)
+    stroke(255, 0, 0)
+    line((x - 1) * 100 + 15, height - 100, (x - 1) * 100 + 15, height - data.get(opcion, x) * 6 - 100)
+    noStroke();
+    text(data.get(opcion, x), (x - 1) * 100 + 15, height - data.get(opcion, x) * 6 - 100);
+
+  }
+
+}
+
+    </script>
+
+</body>
+
+</html>

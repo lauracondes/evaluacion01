@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>DESEMPLEO</title>
+    <link rel="stylesheet" type="text/css" href="estilo.css">
+</head>
+
+<body>
+    
+    <nav>
+        <a href="index.html">Revista UTE</a> <a href="icvu-2019.html">ICVU 2019</a> <a href="psu-nem.html">PSU/NEM</a> <a href="trabajo.html" class="actual">DESEMPLEO</a> <a href="global-warming.html">CALENTAMIENTO GLOBAL</a>
+    </nav>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/p5.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/addons/p5.dom.min.js"></script>
+
+    <script>
+var datahombres
+var datamujeres
+var col
+
+
+function preload() {
+  datahombres = loadTable("https://raw.githubusercontent.com/lauracondes/desafios/master/desempleo-hombres.csv", "csv", "header")
+  datamujeres = loadTable("https://raw.githubusercontent.com/lauracondes/desafios/master/desempleo-mujeres.csv", "csv", "header")
+}
+
+function setup() {
+  createCanvas(windowWidth, windowHeight);
+  sel = createSelect();
+  // posición del menú desplegable
+  sel.position(700, 10);
+  // opciones del menú desplegable
+  sel.option('abr-jun 2019', 1);
+  sel.option('mar-may 2019', 2);
+  sel.option('feb-abr 2019', 3);
+  // nombre de la función oara cambiar el select
+  sel.changed(mySelectEvent);
+  for (var x = 0; x < 16; x++) {
+    noStroke();
+    fill(0)
+    text(datahombres.get(x, 0), 60, (x + 1) * 30);
+    fill(230,140,220);
+    rect(250, (x + 1) * 30 + 5, datahombres.get(x, 1) * 40, 10);
+    fill(205,65,130);
+    rect(250, (x + 1) * 30 - 5, datamujeres.get(x, 1) * 40, 10);
+
+  }
+  fill(0)
+  text ("mujeres",90,570)
+  fill(205,65,130);
+  rect (100,530,20,20);
+  fill(0)
+  text ("hombres",160,570);
+  fill(230,140,220);
+  rect (172,530,20,20);
+  
+}
+
+function mySelectEvent() {
+  clear();
+  opcion = sel.value();
+
+  if (opcion == 1){col=1}
+    else if (opcion==2){col=2}
+    else if (opcion==3){col=3};
+  for (var x = 0; x < 16; x++) {
+    fill(0)
+    text(datahombres.get(x, 0), 50, (x + 1) * 30);
+    fill(230,140,220);
+    rect(250, (x + 1) * 30 + 5, datahombres.get(x, col) * 40, 10);
+    fill(205,65,130);
+    rect(250, (x + 1) * 30 - 5, datamujeres.get(x, col) * 40, 10);}
+  
+  fill(0)
+  text ("mujeres",90,570)
+  fill(205,65,130);
+  rect (100,530,20,20);
+  fill(0)
+  text ("hombres",160,570);
+  fill(230,140,220);
+  rect (172,530,20,20);
+
+}
+    </script>
+
+</body>
+
+</html>

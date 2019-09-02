@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Revista UTE</title>
+    <link rel="stylesheet" type="text/css" href="estilo.css">
+</head>
+
+<body>
+    
+    <nav>
+        <a href="index.html" class="actual">Revista UTE</a> <a href="icvu-2019.html">ICVU 2019</a> <a href="psu-nem.html">PSU/NEM</a> <a href="trabajo.html">DESEMPLEO</a> <a href="global-warming.html">CALENTAMIENTO GLOBAL</a>
+    </nav>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/p5.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/addons/p5.dom.min.js"></script>
+
+    <script>
+        let datos;
+let entradas;
+let indoles;
+let anchopantalla=1000;
+let altopantalla=400;
+let alfa=100;
+let foto=[]
+
+function preload() {
+  let url = 'https://api.myjson.com/bins/1c6ucr';
+  datos = loadJSON(url);
+  let url2 = 'https://api.myjson.com/bins/12i4cb';
+  entradas = loadJSON(url2);
+  let url3 = 'https://api.myjson.com/bins/16p8xf';
+  indoles = loadJSON(url3);
+  let url4 = 'https://api.myjson.com/bins/nlg4j';
+  tipos = loadJSON(url4);
+  let url5 = 'https://api.myjson.com/bins/1bjiuj';
+  foto = loadJSON(url5)
+}
+
+function setup() {
+createCanvas(anchopantalla, altopantalla);
+  background(255);
+
+for (var x = 0; x < 12; x++) {
+ foto[x] = loadImage(datos[x].foto);
+ }
+
+  sel = createSelect();
+  sel.position(10, 10);
+  sel.option('Entradas');
+  sel.option('Índole');
+  sel.option('Tipos de Artículo');
+  sel.changed(CambiaSeleccion);
+    
+    
+}
+function draw() {
+   for (var x = 0; x < 12; x++) {
+    foto = createImg(data[x].foto);
+    foto.hide();
+    foto(foto, (x+1), 300, 100, 150);
+  }
+}
+function CambiaSeleccion() {
+  var item = sel.value();
+  var xtext=14;
+  var ytext=50;
+  var offset=20;
+  var offset2=20;
+  var salto1=40;
+  var ancho=70;
+  var alto=30;
+  var maxentrada=-1;
+  var maxanchoentrada=-1;
+  var anchorect=3;
+  var offsetcontenido=0;
+  var offsetx=0;
+  var offsety=0;
+  var maxindole=-1;
+  var maxanchoindole=-1;
+  var maxtipo=-1;
+  var maxanchotipo=-1;
+  var anchoimagen=0;
+  var altoimagen=0;
+  background(255);
+  textSize(14);
+ 
+  if(item=="Entradas"){
+  
+    for(var y=0;y<12;y++){
+      for(var j=0;j<6;j++){
+        if(datos[y].entradas[j]>maxentrada)
+          maxentrada=datos[y].entradas[j];
+      }
+    }
+ 
+    for(var x =0;x<6;x++){
+      fill(entradas[x].r, entradas[x].g, entradas[x].b,alfa);
+      noStroke();
+      ancho=textWidth(entradas[x].Valor)+5;
+      
+      if (ancho>maxanchoentrada){
+        maxanchoentrada=ancho;
+      }
+      rect(xtext-2,ytext + offset-20,ancho,alto);
+      fill(0,0,255);
+      text(entradas[x].Valor, xtext, ytext + offset);
+      offset+=salto1;
+    } 
+    offsetcontenido=0;
+    maxanchoentrada+=20;
+    
+    noStroke();
+    for(var y=0;y<12;y++){//12 libros
+      offsety=20;
+      for(var j=0;j<6;j++){//6 tipos de entradas
+        fill(entradas[j].r, entradas[j].g, entradas[j].b,alfa);
+        offsetx=0;
+        for(var k=0;k<datos[y].entradas[j];k++){
+          rect(maxanchoentrada+offsetcontenido+offsetx,ytext+offsety-20,anchorect,alto);
+          offsetx+=anchorect+1;
+        }//for(var k=0;k<datos[y].entradas[j];k++)
+        //texto a continuacion de las barras
+        fill(0);
+        textSize(10);
+        text(datos[y].entradas[j], maxanchoentrada+offsetcontenido+offsetx,ytext+offsety);
+        offsety+=salto1;//para eje y de rectangulos chicos
+      }//FIN for(var j=0;j<6;j++)
+      offsetcontenido+=maxentrada*(anchorect+1)+12;
+    }//FIN for(var y=0;y<12;y++)
+    //para las imagenes***********
+//    offsetcontenido=0;
+//    anchoimagen=maxentrada*(anchorect+1)+12;
+//    altoimagen=(maxentrada*(anchorect+1)+12)*1.5;
+//    for (var m = 0; m < 12; m++) {
+//      image(img[m], maxanchoentrada+offsetcontenido, ytext+offsety,anchoimagen,altoimagen);
+//      offsetcontenido+=maxentrada*(anchorect+1)+12;
+//    }//FIN for (var m = 0; m < 12; m++)
+  }//FIN if(item=="Entradas")
+  
+  if(item=="Índole"){
+    //buscar el mayor valor de Indole
+    for(var y=0;y<12;y++){
+      for(var j=0;j<4;j++){
+        if(datos[y].indole[j]>maxindole)
+          maxindole=datos[y].indole[j];
+      }
+    }
+    
+    for(var x =0;x<4;x++){
+      fill(indoles[x].r, indoles[x].g, indoles[x].b,alfa);
+      noStroke();
+      ancho=textWidth(indoles[x].Valor)+5;
+      if (ancho>maxanchoindole){
+        maxanchoindole=ancho;
+      }
+      rect(xtext-2,ytext + offset-20,ancho,alto);
+      fill(0,0,255);
+      text(indoles[x].Valor, xtext, ytext + offset);
+      offset+=salto1;
+    } 
+    
+    offsetcontenido=0;
+    maxanchoindole+=20;
+    //text('Ancho Maximo '+ maxanchoindole, anchopantalla-170, ytext-10);
+    noStroke();
+    for(var y=0;y<12;y++){//12 libros
+      offsety=20;
+      for(var j=0;j<4;j++){//4 tipos de indole
+        fill(indoles[j].r, indoles[j].g, indoles[j].b,alfa);
+        offsetx=0;
+        for(var k=0;k<datos[y].indole[j];k++){
+          rect(maxanchoindole+offsetcontenido+offsetx,ytext+offsety-20,anchorect,alto);
+          offsetx+=anchorect+1;
+        }//for(var k=0;k<datos[y].indole[j];k++)
+        //texto a continuacion de las barras
+        fill(0);
+        textSize(10);
+        text(datos[y].indole[j], maxanchoindole+offsetcontenido+offsetx,ytext+offsety);
+        offsety+=salto1;//para eje y de rectangulos chicos
+      }//FIN for(var j=0;j<4;j++)
+      offsetcontenido+=maxindole*(anchorect+1)+12;
+    }//FIN for(var y=0;y<12;y++)
+    //para las imagenes***********
+//    offsetcontenido=0;
+//    anchoimagen=maxentrada*(anchorect+1)+12;
+//    altoimagen=(maxentrada*(anchorect+1)+12)*1.5;
+//    for (var m = 0; m < 12; m++) {
+//      image(img[m], maxanchoindole+offsetcontenido, ytext+offsety,anchoimagen,altoimagen);
+//      offsetcontenido+=maxindole*(anchorect+1)+12;
+//    }//FIN for (var m = 0; m < 12; m++)
+  }//FIN if(item=="Índole")
+  //********************************************************************************
+  if(item=="Tipos de Artículo"){
+    //buscar el mayor valor de Tipos
+    for(var y=0;y<12;y++){
+      for(var j=0;j<5;j++){
+        if(datos[y].tipo[j]>maxtipo)
+          maxtipo=datos[y].tipo[j];
+      }
+    }
+
+    for(var x =0;x<5;x++){
+      fill(tipos[x].r, tipos[x].g, tipos[x].b,alfa);
+      noStroke();
+      ancho=textWidth(tipos[x].Valor)+5;
+
+      if (ancho>maxanchotipo){
+        maxanchotipo=ancho;
+      }
+      rect(xtext-2,ytext + offset-20,ancho,alto);
+      fill(0,0,255);
+      text(tipos[x].Valor, xtext, ytext + offset);
+      offset+=salto1;
+    }
+    
+    offsetcontenido=0;
+    maxanchotipo+=20;
+    noStroke();
+    for(var y=0;y<12;y++){//12 libros
+      offsety=20;
+      for(var j=0;j<5;j++){//5 tipos de tipo
+        fill(tipos[j].r, tipos[j].g, tipos[j].b,alfa);
+        offsetx=0;
+        for(var k=0;k<datos[y].tipo[j];k++){
+          rect(maxanchotipo+offsetcontenido+offsetx,ytext+offsety-20,anchorect,alto);
+          offsetx+=anchorect+1;
+        }
+  
+        fill(0);
+        textSize(10);
+        text(datos[y].tipo[j], maxanchotipo+offsetcontenido+offsetx,ytext+offsety);
+        offsety+=salto1;
+      }
+      offsetcontenido+=maxtipo*(anchorect+1)+12;
+    }
+    //para las imagenes***********
+    
+//    offsetcontenido=0;
+//    anchoimagen=maxentrada*(anchorect+1)+12;
+//    altoimagen=(maxentrada*(anchorect+1)+12)*1.5;
+//    for (var m = 0; m < 12; m++) {
+//      image(img[m], maxanchotipo+offsetcontenido, ytext+offsety,anchoimagen,altoimagen);
+//      offsetcontenido+=maxtipo*(anchorect+1)+12;
+//    }//FIN for (var m = 0; m < 12; m++)
+  }//FIN if(item=="Tipos de Artículo")
+  
+  
+}
+    </script>
+
+</body>
+
+</html>

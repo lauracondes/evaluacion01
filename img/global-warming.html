@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>CALENTAMIENTO GLOBAL</title>
+    <link rel="stylesheet" type="text/css" href="estilo.css">
+</head>
+
+<body>
+    
+    <nav>
+        <a href="index.html">Revista UTE</a> <a href="icvu-2019.html">ICVU 2019</a> <a href="psu-nem.html">PSU/NEM</a> <a href="trabajo.html">DESEMPLEO</a> <a href="global-warming.html" class="actual">CALENTAMIENTO GLOBAL</a>
+    </nav>
+
+    <canvas id="chart"></canvas>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/p5.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script>
+
+    <script>
+        
+        var data
+        var años=[]
+        var norte=[]
+        var sur =[] 
+
+        function preload(){
+            
+            data= loadTable("https://raw.githubusercontent.com/profesorfaco/datos/gh-pages/datos/global-warming.csv","cvs","header");
+        }
+
+        function setup() {
+            
+            var n = data.getRowCount();
+            for (x=0; x<n; x++ )
+            { años.push (Number(data.get(x,0)))
+             norte.push(Number(data.get(x,2)+14))
+             sur.push(Number(data.get(x,3)+14))
+                
+            }
+
+var ctx = document.getElementById('chart').getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: años,
+        datasets: [{
+            label: 'temperatura en hemisferio norte',
+            data:norte,
+            backgroundColor:"rgb(230,140,220)", 
+            borderColor:"rgb(230,140,220)",
+            borderWidth: 1,
+            fill: false
+        },
+             {
+            label: 'temperatura en hemisferio sur',
+            data:sur,
+            backgroundColor:"rgb(205,65,130)", 
+            borderColor:"rgb(205,65,130)",
+            borderWidth: 1,
+            fill: false}
+             ]
+    },
+    options: {
+    }
+});
+
+
+        }
+    </script>
+    
+</body>
+
+</html>
